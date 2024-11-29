@@ -39,7 +39,7 @@ $notifications_latest = optional($notifications)->take(5);
                 @lang("Dashboard")
             </a>
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a class="nav-link" href="{{ route("backend.notifications.index") }}">
                 <i class="nav-icon fa-regular fa-bell"></i>
                 &nbsp;
@@ -143,7 +143,7 @@ $notifications_latest = optional($notifications)->take(5);
                     </li>
                 </ul>
             </li>
-        @endcan
+        @endcan -->
     </ul>
     <div class="sidebar-footer border-top d-none d-md-flex">
         <button class="sidebar-toggler" data-coreui-toggle="unfoldable" type="button"></button>
