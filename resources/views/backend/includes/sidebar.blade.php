@@ -40,9 +40,9 @@ $notifications_latest = optional($notifications)->take(5);
             </a>
         </li>
         @php
-            $module_name = "posts";
-            $text = __("Posts");
-            $icon = "fa-regular fa-file-lines";
+            $module_name = "movies";
+            $text = __("Movies");
+            $icon = "fa-solid fa-video";
             $permission = "view_" . $module_name;
             $url = route("backend." . $module_name . ".index");
         @endphp
