@@ -39,6 +39,16 @@ $notifications_latest = optional($notifications)->take(5);
                 @lang("Dashboard")
             </a>
         </li>
+        @php
+            $module_name = "posts";
+            $text = __("Posts");
+            $icon = "fa-regular fa-file-lines";
+            $permission = "view_" . $module_name;
+            $url = route("backend." . $module_name . ".index");
+        @endphp
+
+        <x-backend.sidebar-nav-item :permission="$permission" :url="$url" :icon="$icon" :text="$text" />
+
         <!-- <li class="nav-item">
             <a class="nav-link" href="{{ route("backend.notifications.index") }}">
                 <i class="nav-icon fa-regular fa-bell"></i>
