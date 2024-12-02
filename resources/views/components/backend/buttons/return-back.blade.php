@@ -1,6 +1,6 @@
 @props(["small" => "true"])
 <button
-    onclick="window.location.href='{{ route('backend.movies.index') }}'"
+    onclick="window.location.href='{{ route('backend.movies.add') }}'"
     class="btn btn-success {{ $small == 'true' ? 'btn-sm' : '' }} m-1"
     data-toggle="tooltip"
     title="{{ __('Add Movie') }}"

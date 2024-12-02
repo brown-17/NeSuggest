@@ -21,6 +21,20 @@
                 :module_icon="$module_icon"
                 :module_action="$module_action"
             />
+            <form action="{{ route('backend.movies.store') }}" method="post">
+                @csrf
+                <div class="form-group">
+                    <label for="movie-name">Movie Name</label>
+                    <div class="row">
+                        <div class="col-10">
+                            <input type="text" class="form-control" id="movie-name" name="movie_name" placeholder="Movie name">
+                        </div>
+                        <div class="col-2">
+                            <button type="submit" class="btn btn-primary w-100">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>                                     
         </div>
         <div class="card-footer">
         </div>

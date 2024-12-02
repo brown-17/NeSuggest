@@ -145,6 +145,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     $module_name = 'movies';
     $controller_name = 'MoviesController';
     Route::get("{$module_name}", ['as' => "{$module_name}.index", 'uses' => "{$controller_name}@index"]);
+    Route::get("{$module_name}/add", ['as' => "{$module_name}.add", 'uses' => "{$controller_name}@add"]);
+    Route::post("{$module_name}/store", ['as' => "{$module_name}.store", 'uses' => "{$controller_name}@store"]);
 });
 
 /**

@@ -51,7 +51,7 @@ class MoviesController extends Controller
         return view("backend.movies.movies",  compact('module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
     }
 
-    public function show(){
+    public function add(){
         $module_title = $this->module_title;
         $module_name = $this->module_name;
         $module_path = $this->module_path;
@@ -59,9 +59,13 @@ class MoviesController extends Controller
         $module_model = $this->module_model;
         $module_name_singular = Str::singular($module_name);
 
-        $module_action = 'Show';
+        $module_action = 'Add';
 
         return view("backend.movies.add", compact('module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
+    }
+
+    public function store(Request $request){
+        dd($request->all());
     }
 
     
