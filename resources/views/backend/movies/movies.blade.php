@@ -21,6 +21,53 @@
                 :module_icon="$module_icon"
                 :module_action="$module_action"
             />
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            <div class="container">
+                <!-- Table for Movies -->
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Movies List</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Movie Name</th>
+                                    <th>Added On</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($allMovies as $movie)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>{{$movie->title}}</td>
+                                        <td>{{\Carbon\Carbon::parse($movie->created_at)->format('d M Y')}}</td>
+                                        <td>
+                                            <!-- Edit Button -->
+                                            <button class="btn btn-warning btn-sm">
+                                                <i class="fa fa-pencil"></i> <!-- Edit Icon -->
+                                            </button>
+            
+                                            <!-- Delete Button -->
+                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this movie?')">
+                                                <i class="fa fa-trash"></i> <!-- Delete Icon -->
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-footer">
         </div>

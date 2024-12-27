@@ -4,7 +4,10 @@ namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use App\Models\Movies;
+use Carbon\Carbon;
 
 
 class MoviesController extends Controller
@@ -47,8 +50,10 @@ class MoviesController extends Controller
         $module_name_singular = Str::singular($module_name);
 
         $module_action = 'List';
+
+        $allMovies =  Movies::all();
         
-        return view("backend.movies.movies",  compact('module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
+        return view("backend.movies.movies",  compact('allMovies', 'module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
     }
 
     public function add(){
@@ -64,11 +69,62 @@ class MoviesController extends Controller
         return view("backend.movies.add", compact('module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
     }
 
-    public function store(Request $request){
-        dd($request->all());
+    public function store(Request $request)
+    {
+        $request->validate([
+            'movie_name' => 'required|string',
+        ]);
+
+        $movieName = $request->input('movie_name');
+        $apiKey = env('OMDB_API_KEY');
+
+        $response = Http::get("http://www.omdbapi.com/", [
+            't' => $movieName,
+            'apikey' => $apiKey,
+        ]);
+
+        if ($response->successful() && $response->json('Response') === 'True') {
+            $movieData = $response->json();
+            // dd($movieData);
+
+            $releasedDate = Carbon::createFromFormat('d M Y', $movieData['Released'])->format('Y-m-d');
+            $imdbVotes = preg_replace('/[^0-9]/', '', $movieData['imdbVotes']);
+
+            $movie = [
+                'title' => $movieData['Title'],
+                'year' => $movieData['Year'],
+                'rated' => $movieData['Rated'],
+                'released' => $releasedDate,
+                'runtime' => $movieData['Runtime'],
+                'genre' => $movieData['Genre'],
+                'director' => $movieData['Director'],
+                'writer' => $movieData['Writer'],
+                'actors' => $movieData['Actors'],
+                'plot' => $movieData['Plot'],
+                'language' => $movieData['Language'],
+                'country' => $movieData['Country'],
+                'awards' => $movieData['Awards'],
+                'poster' => $movieData['Poster'],
+                'ratings' => json_encode($movieData['Ratings']),
+                'metascore' => $movieData['Metascore'],
+                'imdb_rating' => $movieData['imdbRating'],
+                'imdb_votes' => $imdbVotes,
+                'imdb_id' => $movieData['imdbID'],
+                'type' => $movieData['Type'],
+                'dvd' => $movieData['DVD'],
+                'box_office' => $movieData['BoxOffice'],
+                'production' => $movieData['Production'],
+                'website' => $movieData['Website'],
+            ];
+
+            Movies::create($movie);
+
+            return redirect()->route('backend.movies.index')->with('success', 'Movie data successfully added to the database.');
+        }
+
+            return redirect()->route('backend.movies.add')->with('error', 'Movie not found or an error occurred. Please try again.');
     }
 
-    
 }
 
 
