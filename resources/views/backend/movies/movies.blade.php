@@ -52,9 +52,9 @@
                                         <td>{{\Carbon\Carbon::parse($movie->created_at)->format('d M Y')}}</td>
                                         <td>
                                             <!-- Edit Button -->
-                                            <button class="btn btn-warning btn-sm">
+                                            <a href="{{route('backend.movies.edit',$movie->id)}}" class="btn btn-warning btn-sm">
                                                 <i class="fa fa-pencil"></i> <!-- Edit Icon -->
-                                            </button>
+                                            </a>
             
                                             <!-- Delete Button -->
                                             <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this movie?')">

@@ -53,7 +53,7 @@ class MoviesController extends Controller
 
         $allMovies =  Movies::all();
         
-        return view("backend.movies.movies",  compact('allMovies', 'module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
+        return  view("backend.movies.movies",  compact('allMovies', 'module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
     }
 
     public function add(){
@@ -123,6 +123,21 @@ class MoviesController extends Controller
         }
 
             return redirect()->route('backend.movies.add')->with('error', 'Movie not found or an error occurred. Please try again.');
+    }
+
+    public function edit(Request $request){
+        $module_title = $this->module_title;
+        $module_name = $this->module_name;
+        $module_path = $this->module_path;
+        $module_icon = $this->module_icon;
+        $module_model = $this->module_model;
+        $module_name_singular = Str::singular($module_name);
+
+        $module_action = 'Edit';
+
+        $relativeData = Movies::where('id',$request->id)->get();
+
+        dd($relativeData);
     }
 
 }
