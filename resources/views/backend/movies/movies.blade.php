@@ -52,14 +52,18 @@
                                         <td>{{\Carbon\Carbon::parse($movie->created_at)->format('d M Y')}}</td>
                                         <td>
                                             <!-- Edit Button -->
-                                            <a href="{{route('backend.movies.edit',$movie->id)}}" class="btn btn-warning btn-sm">
+                                            <a href="{{route('backend.movies.show',$movie->id)}}" class="btn btn-warning btn-sm">
                                                 <i class="fa fa-pencil"></i> <!-- Edit Icon -->
                                             </a>
             
                                             <!-- Delete Button -->
-                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this movie?')">
-                                                <i class="fa fa-trash"></i> <!-- Delete Icon -->
-                                            </button>
+                                            <form action="{{ route('backend.movies.destroy', $movie->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this movie?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">
+                                                    <i class="fa fa-trash"></i> <!-- Delete Icon -->
+                                                </button>
+                                            </form>                                            
                                         </td>
                                     </tr>
                                 @endforeach

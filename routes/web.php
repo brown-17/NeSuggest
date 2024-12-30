@@ -147,7 +147,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get("{$module_name}", ['as' => "{$module_name}.index", 'uses' => "{$controller_name}@index"]);
     Route::get("{$module_name}/add", ['as' => "{$module_name}.add", 'uses' => "{$controller_name}@add"]);
     Route::post("{$module_name}/store", ['as' => "{$module_name}.store", 'uses' => "{$controller_name}@store"]);
-    Route::get("{$module_name}/edit/{id}",['as'=> "{$module_name}.edit", 'uses'=> "{$controller_name}@edit"]);
+    Route::get("{$module_name}/edit/{id}",['as'=> "{$module_name}.show", 'uses'=> "{$controller_name}@edit"]);
+    Route::post("{$module_name}/update/{id}",['as'=> "{$module_name}.update", 'uses'=> "{$controller_name}@update"]);
+    Route::delete("{$module_name}/destroy/{id}",['as'=> "{$module_name}.destroy", 'uses'=> "{$controller_name}@destroy"]);
 });
 
 /**

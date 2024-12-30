@@ -135,9 +135,49 @@ class MoviesController extends Controller
 
         $module_action = 'Edit';
 
-        $relativeData = Movies::where('id',$request->id)->get();
+        $movie = Movies::where('id',$request->id)->first();
 
-        dd($relativeData);
+        return  view("backend.movies.edit",  compact('movie', 'module_title', 'module_name', 'module_path', 'module_icon', 'module_action', 'module_name_singular'));
+    }
+
+    public function update(Request $request, $id){
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'year' => 'required',
+            'rated' => 'nullable|string|max:255',
+            'released' => 'nullable|date',
+            'runtime' => 'nullable|string|max:255',
+            'genre' => 'nullable|string|max:255',
+            'director' => 'nullable|string|max:255',
+            'writer' => 'nullable|string',
+            'actors' => 'nullable|string',
+            'plot' => 'nullable|string',
+            'language' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'awards' => 'nullable|string',
+            'metascore' => 'nullable|integer|min:0|max:100',
+            'imdb_votes' => 'nullable|integer|min:0',
+            'type' => 'nullable|string|max:50',
+            'dvd' => 'nullable|string|max:50',
+            'box_office' => 'nullable|string|max:50',
+            'production' => 'nullable|string|max:255',
+            'website' => 'nullable|string',
+        ]);
+
+        $movie = Movies::findOrFail($id);
+
+        $movie->update($validatedData);
+
+        return redirect()->route('backend.movies.index')->with('success', 'Movie updated successfully.');
+    }
+
+    public function destroy($id){
+
+        $movie = Movies::findOrFail($id);
+
+        $movie->delete();
+    
+        return redirect()->route('backend.movies.index')->with('success', 'Movie deleted successfully.');
     }
 
 }
