@@ -145,11 +145,19 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     $module_name = 'movies';
     $controller_name = 'MoviesController';
     Route::get("{$module_name}", ['as' => "{$module_name}.index", 'uses' => "{$controller_name}@index"]);
-    Route::get("{$module_name}/add", ['as' => "{$module_name}.add", 'uses' => "{$controller_name}@add"]);
+    Route::get("{$module_name}/add", ['as' => "{$module_name}.create", 'uses' => "{$controller_name}@add"]);
     Route::post("{$module_name}/store", ['as' => "{$module_name}.store", 'uses' => "{$controller_name}@store"]);
     Route::get("{$module_name}/edit/{id}",['as'=> "{$module_name}.show", 'uses'=> "{$controller_name}@edit"]);
     Route::post("{$module_name}/update/{id}",['as'=> "{$module_name}.update", 'uses'=> "{$controller_name}@update"]);
     Route::delete("{$module_name}/destroy/{id}",['as'=> "{$module_name}.destroy", 'uses'=> "{$controller_name}@destroy"]);
+    Route::get("{$module_name}/trashed", ['as' => "{$module_name}.trashed", 'uses' => "{$controller_name}@index"]);
+
+    //Bulk Movies Upload
+    $module_name = 'moviesbulk';
+    $controller_name = 'BulkController';
+    Route::get("{$module_name}", ['as' => "{$module_name}.index", 'uses' => "{$controller_name}@bulkIndex"]);
+    Route::get("{$module_name}/create", ['as' => "{$module_name}.create", 'uses' => "{$controller_name}@create"]);
+    Route::get("{$module_name}/trashed", ['as' => "{$module_name}.trashed", 'uses' => "{$controller_name}@index"]);
 });
 
 /**

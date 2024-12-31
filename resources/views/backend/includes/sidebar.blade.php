@@ -49,6 +49,27 @@ $notifications_latest = optional($notifications)->take(5);
 
         <x-backend.sidebar-nav-item :permission="$permission" :url="$url" :icon="$icon" :text="$text" />
 
+        @php
+            $module_name = "moviesbulk";
+            $text = __("Movies Bulk Upload");
+            $icon = "fa-solid fa-cubes";
+            $permission = "view_" . $module_name;
+            $url = route("backend." . $module_name . ".index");
+        @endphp
+
+        <x-backend.sidebar-nav-item :permission="$permission" :url="$url" :icon="$icon" :text="$text" />
+
+        @php
+        $module_name = "settings";
+        $text = __("Settings");
+        $icon = "fa-solid fa-gears";
+        $permission = "edit_" . $module_name;
+        $url = route("backend." . $module_name . ".index");
+        @endphp
+
+        <x-backend.sidebar-nav-item :permission="$permission" :url="$url" :icon="$icon" :text="$text" />
+
+
         <!-- <li class="nav-item">
             <a class="nav-link" href="{{ route("backend.notifications.index") }}">
                 <i class="nav-icon fa-regular fa-bell"></i>
