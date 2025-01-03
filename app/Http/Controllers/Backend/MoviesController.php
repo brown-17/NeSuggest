@@ -92,7 +92,7 @@ class MoviesController extends Controller
 
             $movie = [
                 'title' => $movieData['Title'],
-                'year' => $movieData['Year'],
+                'year' => isset($movieDetails['Year']) ? explode('–', $movieDetails['Year'])[0] : null,
                 'rated' => $movieData['Rated'],
                 'released' => $releasedDate,
                 'runtime' => $movieData['Runtime'],

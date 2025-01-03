@@ -158,6 +158,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Backend', 'prefix' => 'admin'
     Route::get("{$module_name}", ['as' => "{$module_name}.index", 'uses' => "{$controller_name}@bulkIndex"]);
     Route::get("{$module_name}/create", ['as' => "{$module_name}.create", 'uses' => "{$controller_name}@create"]);
     Route::get("{$module_name}/trashed", ['as' => "{$module_name}.trashed", 'uses' => "{$controller_name}@index"]);
+    Route::post("{$module_name}/store", ['as' => "{$module_name}.store", 'uses' => "{$controller_name}@bulkUpload"]);
+
 });
 
 /**

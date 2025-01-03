@@ -28,7 +28,7 @@
                 </div>
             @endif
             <div class="container">
-                <form action="" method="POST">
+                <form action="{{route('backend.moviesbulk.store')}}" method="POST">
                     @csrf
                     <!-- Number of Movies -->
                     <div class="mb-3">
@@ -39,7 +39,8 @@
                             id="movieCount" 
                             name="movie_count" 
                             placeholder="Enter the number of movies" 
-                            required>
+                            required
+                        >
                     </div>
                     
                     <!-- Genre -->
@@ -51,9 +52,9 @@
                             id="genre" 
                             name="genres" 
                             placeholder="e.g., Action, Comedy, Drama" 
-                            required>
+                            required
+                        >
                     </div>
-        
                     <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary">Add Movies</button>
                 </form>

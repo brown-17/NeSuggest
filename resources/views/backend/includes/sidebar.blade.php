@@ -34,7 +34,7 @@ $notifications_latest = optional($notifications)->take(5);
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
         <li class="nav-item">
             <a class="nav-link" href="{{ route("backend.dashboard") }}">
-                <i class="nav-icon fa-solid fa-cubes"></i>
+                <i class="nav-icon fa-solid fa-table-columns"></i>
                 &nbsp;
                 @lang("Dashboard")
             </a>

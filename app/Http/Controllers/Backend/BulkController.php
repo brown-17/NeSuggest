@@ -69,6 +69,116 @@ class BulkController extends Controller
 
     }
 
+    public function bulkUpload(Request $request)
+    {
+        $request->validate([
+            'movie_count' => 'required|integer|min:1',
+            'genres' => 'required|string',
+        ]);
+
+        $movieCount = $request->input('movie_count');
+        $genres = $request->input('genres');
+
+        // Explode genres by commas and trim spaces
+        $genreArray = array_map('trim', explode(',', $genres));
+
+        // Calculate how many movies per genre
+        $moviesPerGenre = intval($movieCount / count($genreArray));
+        $remainingMovies = $movieCount % count($genreArray);
+
+        $apiKey = env('OMDB_API_KEY');
+        $moviesAdded = [];
+
+        foreach ($genreArray as $genre) {
+            for ($i = 0; $i < $moviesPerGenre; $i++) {
+                $response = Http::get("http://www.omdbapi.com/", [
+                    's' => $genre, // Search by genre
+                    'apikey' => $apiKey,
+                    'page' => rand(1, 5), // Random page for variety
+                ]);
+
+                if ($response->successful() && $response->json('Response') === 'True') {
+                    $searchResults = $response->json('Search');
+                    if (is_array($searchResults) && count($searchResults) > 0) {
+                        // Pick a random movie from search results
+                        $randomMovie = $searchResults[array_rand($searchResults)];
+
+                        // Get full movie details by IMDb ID
+                        $movieDetails = Http::get("http://www.omdbapi.com/", [
+                            'i' => $randomMovie['imdbID'],
+                            'apikey' => $apiKey,
+                        ])->json();
+
+                        if ($movieDetails && $movieDetails['Response'] === 'True') {
+                            // Save the movie details in the database
+                            Movies::create([
+                                'title' => $movieDetails['Title'],
+                                'year' => isset($movieDetails['Year']) ? explode('–', $movieDetails['Year'])[0] : null,
+                                'rated' => $movieDetails['Rated'] ?? null,
+                                'released' => date('Y-m-d', strtotime($movieDetails['Released'] ?? '')),
+                                'runtime' => $movieDetails['Runtime'] ?? null,
+                                'genre' => $movieDetails['Genre'] ?? null,
+                                'director' => $movieDetails['Director'] ?? null,
+                                'writer' => $movieDetails['Writer'] ?? null,
+                                'actors' => $movieDetails['Actors'] ?? null,
+                                'plot' => $movieDetails['Plot'] ?? null,
+                                'language' => $movieDetails['Language'] ?? null,
+                                'country' => $movieDetails['Country'] ?? null,
+                                'awards' => $movieDetails['Awards'] ?? null,
+                                'poster' => $movieDetails['Poster'] ?? null,
+                                'ratings' => json_encode($movieDetails['Ratings'] ?? []),
+                                'metascore' => $movieDetails['Metascore'] ?? null,
+                                'imdb_rating' => $movieDetails['imdbRating'] ?? null,
+                                'imdb_votes' => str_replace(',', '', $movieDetails['imdbVotes'] ?? ''),
+                                'imdb_id' => $movieDetails['imdbID'] ?? null,
+                                'type' => $movieDetails['Type'] ?? null,
+                                'dvd' => $movieDetails['DVD'] ?? null,
+                                'box_office' => $movieDetails['BoxOffice'] ?? null,
+                                'production' => $movieDetails['Production'] ?? null,
+                                'website' => $movieDetails['Website'] ?? null,
+                            ]);
+
+                            $moviesAdded[] = $movieDetails['Title'];
+                        }
+                    }
+                }
+            }
+        }
+
+        // If remaining movies are present, add them to the first genre
+        if ($remainingMovies > 0 && isset($genreArray[0])) {
+            for ($i = 0; $i < $remainingMovies; $i++) {
+                $response = Http::get("http://www.omdbapi.com/", [
+                    's' => $genreArray[0], // First genre
+                    'apikey' => $apiKey,
+                    'page' => rand(1, 5),
+                ]);
+
+                if ($response->successful() && $response->json('Response') === 'True') {
+                    $searchResults = $response->json('Search');
+                    if (is_array($searchResults) && count($searchResults) > 0) {
+                        $randomMovie = $searchResults[array_rand($searchResults)];
+
+                        $movieDetails = Http::get("http://www.omdbapi.com/", [
+                            'i' => $randomMovie['imdbID'],
+                            'apikey' => $apiKey,
+                        ])->json();
+
+                        if ($movieDetails && $movieDetails['Response'] === 'True') {
+                            Movie::create([
+                                // Same as above fields
+                            ]);
+                            $moviesAdded[] = $movieDetails['Title'];
+                        }
+                    }
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Successfully added ' . count($moviesAdded) . ' movies!');
+    }
+
+
 
 
 }
