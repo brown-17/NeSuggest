@@ -55,6 +55,18 @@
                             required
                         >
                     </div>
+
+                    <!-- Year Range -->
+                    <div class="mb-3">
+                        <label for="yearRange" class="form-label">From Which Year (Optional)</label>
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="yearRange" 
+                            name="year_range" 
+                            placeholder="e.g., 2010-2015"
+                        >
+                    </div>
                     <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary">Add Movies</button>
                 </form>
